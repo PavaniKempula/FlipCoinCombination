@@ -108,10 +108,60 @@ TripletCombination(){
 }
 
 
+
+
+winnigCombination(){
+
+  local valueArray=()
+  local count=0
+
+  local n=${#combinationCountDict[@]}
+
+  for key in ${!combinationCountDict[@]}
+  do
+     keyArray[((count))]=$key
+     valueArray[((count))]=${combinationCountDict[$key]}
+     ((count++))
+  done
+
+
+
+  for (( i=0; i<$n; i++ ))
+  do
+      for (( j=0; j<$n-i-1 ; j++  ))
+      do
+         if [ ${valueArray[$j]} -lt ${valueArray[$(( j+1 ))]} ]
+         then
+
+             tempValue=${valueArray[$j]}
+             valueArray[$j]=${valueArray[$(( j+1 ))]}
+             valueArray[$(( j+1 ))]=$tempValue
+         fi
+      done
+  done
+  
+
+echo 'Winner is/are: '
+for key in ${!combinationCountDict[@]}
+do
+   if [ ${valueArray[0]} -eq ${combinationCountDict[$key]} ]
+   then
+       echo 'Combination '$key' and Score is '${combinationPercentDict[$key]}'%'
+   fi
+done
+
+  
+
+}
+
+
+
 singletCombination
 doubletCombination
 TripletCombination
 
 echo ${combinationCountDict[@]}
 echo ${combinationPercentDict[@]}
+
+winnigCombination
 
